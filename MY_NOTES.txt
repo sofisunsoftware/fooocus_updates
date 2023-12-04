@@ -1,0 +1,2 @@
+/Users/aleksandrstrokin/Documents/FOOOCUS/modules/async_worker.py - inpaint (extract result image)
+/Users/aleksandrstrokin/Documents/FOOOCUS/backend/headless/fcbh/clip_vision.py - convert image to tensor

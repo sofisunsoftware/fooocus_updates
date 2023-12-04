@@ -784,6 +784,11 @@ def worker():
                         if n != 'None':
                             d.append((f'LoRA [{n}] weight', w))
                     log(x, d, single_line_number=3)
+                    print("log(x, d, single_line_number=3)")
+                    print("x")
+                    print(x)
+                    print("d")
+                    print(d)
 
                 yield_result(async_task, imgs, do_not_show_finished_images=len(tasks) == 1)
             except fcbh.model_management.InterruptProcessingException as e:

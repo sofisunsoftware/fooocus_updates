@@ -274,19 +274,9 @@ def worker():
             if (current_tab == 'inpaint' or (
                     current_tab == 'ip' and advanced_parameters.mixing_image_prompt_and_inpaint)) \
                     and isinstance(inpaint_input_image, dict):
-                # inpaint_image = inpaint_input_image['image']
+                inpaint_image = inpaint_input_image['image']
                 inpaint_mask = inpaint_input_image['mask'][:, :, 0]
-                # inpaint_image = HWC3(inpaint_image)
-
-                path = os.path.dirname(os.path.abspath(__file__))
-                image_path = os.path.join(path, 'test.png')
-                inpaint_image = plt.imread('test.png')
                 inpaint_image = HWC3(inpaint_image)
-
-
-
-
-
                 if isinstance(inpaint_image, np.ndarray) and isinstance(inpaint_mask, np.ndarray) \
                         and (np.any(inpaint_mask > 127) or len(outpaint_selections) > 0):
                     if inpaint_parameterized:

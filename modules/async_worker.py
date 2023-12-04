@@ -139,6 +139,8 @@ def worker():
         inpaint_input_image = args.pop()
         inpaint_additional_prompt = args.pop()
 
+        print(inpaint_input_image)
+
         cn_tasks = {x: [] for x in flags.ip_list}
         for _ in range(4):
             cn_img = args.pop()

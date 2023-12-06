@@ -1,6 +1,6 @@
 import threading
 import matplotlib.pyplot as plt
-
+import cv2
 
 class AsyncTask:
     def __init__(self, args):
@@ -224,6 +224,9 @@ def worker():
 
         skip_prompt_processing = False
         refiner_swap_method = advanced_parameters.refiner_swap_method
+        refiner_swap_method = 'joint'
+        print("refiner_swap_method")
+        print(refiner_swap_method)
 
         inpaint_worker.current_task = None
         inpaint_parameterized = advanced_parameters.inpaint_engine != 'None'
@@ -275,8 +278,16 @@ def worker():
                     current_tab == 'ip' and advanced_parameters.mixing_image_prompt_and_inpaint)) \
                     and isinstance(inpaint_input_image, dict):
                 inpaint_image = inpaint_input_image['image']
+
+                print("!!! inpaint_image !!! change it")
+                print(inpaint_image)
+
+                im = cv2.imread('./test.png')
+                inpaint_image = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+
                 inpaint_mask = inpaint_input_image['mask'][:, :, 0]
                 inpaint_image = HWC3(inpaint_image)
+
                 if isinstance(inpaint_image, np.ndarray) and isinstance(inpaint_mask, np.ndarray) \
                         and (np.any(inpaint_mask > 127) or len(outpaint_selections) > 0):
                     if inpaint_parameterized:
@@ -321,17 +332,29 @@ def worker():
 
         switch = int(round(steps * refiner_switch))
 
-        if advanced_parameters.overwrite_step > 0:
-            steps = advanced_parameters.overwrite_step
+        try:
+            if advanced_parameters.overwrite_step > 0:
+                steps = advanced_parameters.overwrite_step
+        except:
+            pass
 
-        if advanced_parameters.overwrite_switch > 0:
-            switch = advanced_parameters.overwrite_switch
+        try:
+            if advanced_parameters.overwrite_switch > 0:
+                switch = advanced_parameters.overwrite_switch
+        except:
+            pass
 
-        if advanced_parameters.overwrite_width > 0:
-            width = advanced_parameters.overwrite_width
+        try:
+            if advanced_parameters.overwrite_width > 0:
+                width = advanced_parameters.overwrite_width
+        except:
+            pass
 
-        if advanced_parameters.overwrite_height > 0:
-            height = advanced_parameters.overwrite_height
+        try:
+            if advanced_parameters.overwrite_height > 0:
+                height = advanced_parameters.overwrite_height
+        except:
+            pass
 
         print(f'[Parameters] Sampler = {sampler_name} - {scheduler_name}')
         print(f'[Parameters] Steps = {steps} - {switch}')

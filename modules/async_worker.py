@@ -140,7 +140,9 @@ def worker():
         inpaint_input_image = args.pop()
         inpaint_additional_prompt = args.pop()
 
-        print(inpaint_input_image)
+        print("prompt: ", prompt)
+        print("negative_prompt: ", negative_prompt)
+        print("inpaint_additional_prompt: ", inpaint_additional_prompt)
 
         cn_tasks = {x: [] for x in flags.ip_list}
         for _ in range(4):
@@ -286,6 +288,14 @@ def worker():
                 inpaint_image = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
                 inpaint_mask = inpaint_input_image['mask'][:, :, 0]
+
+                print("!!! inpaint_mask !!! change it")
+                print(inpaint_mask)
+
+                im = cv2.imread('mask.png')
+                inpaint_mask = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+                inpaint_mask = inpaint_mask[:, :, 0]
+
                 inpaint_image = HWC3(inpaint_image)
 
                 if isinstance(inpaint_image, np.ndarray) and isinstance(inpaint_mask, np.ndarray) \

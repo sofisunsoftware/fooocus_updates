@@ -45,7 +45,7 @@ def updateInpaintDataResultImage(task_id, do_url_image):
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     response = requests.request("POST", url, headers=headers, data=payload)
-    result = response.json()
+    # result = response.json()
     
     return ''
 

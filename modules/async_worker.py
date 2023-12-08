@@ -1,6 +1,10 @@
 import threading
 import matplotlib.pyplot as plt
 import cv2
+from skimage import io
+import requests
+
+API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
 
 class AsyncTask:
     def __init__(self, args):
@@ -51,6 +55,22 @@ def worker():
         print(flag)
     except Exception as e:
         print(e)
+
+    def getTaskData():
+        url = "https://discord-api.sofisun.software/api/getInpaintTask"
+        payload = 'key='+str(API_KEY)+'&status=in_progress'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        result = response.json()
+        cid = result['id']
+        task_id = result['task_id']
+        inpaint_input_image_url = result['inpaint_input_image_url']
+        inpaint_mask_url = result['inpaint_mask_url']
+        inpaint_additional_prompt = result['inpaint_additional_prompt']
+
+        return [cid, task_id, inpaint_input_image_url, inpaint_mask_url, inpaint_additional_prompt]
 
     def progressbar(async_task, number, text):
         print(f'[Fooocus] {text}')
@@ -143,6 +163,13 @@ def worker():
         print("prompt: ", prompt)
         print("negative_prompt: ", negative_prompt)
         print("inpaint_additional_prompt: ", inpaint_additional_prompt)
+
+        task_data = getTaskData()
+        cid = task_data[0]
+        task_id = task_data[1]
+        inpaint_input_image_url = task_data[2]
+        inpaint_mask_url = task_data[3]
+        inpaint_additional_prompt = task_data[4]
 
         cn_tasks = {x: [] for x in flags.ip_list}
         for _ in range(4):
@@ -284,7 +311,7 @@ def worker():
                 print("!!! inpaint_image !!! change it")
                 print(inpaint_image)
 
-                im = cv2.imread('./test.png')
+                im = io.imread(str(inpaint_input_image_url))
                 inpaint_image = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
                 inpaint_mask = inpaint_input_image['mask'][:, :, 0]
@@ -292,8 +319,9 @@ def worker():
                 print("!!! inpaint_mask !!! change it")
                 print(inpaint_mask)
 
-                im = cv2.imread('mask.png')
+                im = io.imread(str(inpaint_mask_url))
                 inpaint_mask = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+
                 inpaint_mask = inpaint_mask[:, :, 0]
 
                 inpaint_image = HWC3(inpaint_image)

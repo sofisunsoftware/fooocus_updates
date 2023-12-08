@@ -161,6 +161,7 @@ def worker():
         inpaint_additional_prompt = args.pop()
 
         image_number = 1
+        current_tab == 'inpaint'
 
         print("prompt: ", prompt)
         print("negative_prompt: ", negative_prompt)

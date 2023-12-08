@@ -4,7 +4,7 @@ import cv2
 from skimage import io
 import requests
 
-API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
+# API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
 
 class AsyncTask:
     def __init__(self, args):
@@ -46,6 +46,8 @@ def worker():
     from modules.util import remove_empty_str, HWC3, resize_image, \
         get_image_shape_ceil, set_image_shape_ceil, get_shape_ceil, resample_image
     from modules.upscaler import perform_upscale
+
+    from settings import *
 
     try:
         async_gradio_app = shared.gradio_root
@@ -162,6 +164,7 @@ def worker():
 
         image_number = 1
         current_tab == 'inpaint'
+        input_image_checkbox = True
 
         print("prompt: ", prompt)
         print("negative_prompt: ", negative_prompt)

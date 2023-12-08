@@ -5,9 +5,49 @@ import modules.config
 from PIL import Image
 from modules.util import generate_temp_filename
 
+import requests
+
+# UPLOAD FILE TO THE DIGITALOCEAN SPACE
+import boto3
+from botocore.client import Config
+
+#OUR API KEY
+API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
+
+#DIGITAL OCEAN SPACE (S3)
+DO_S3_ACCESS_ID = 'DO00EX6BHL6MGWNQU9K9'
+DO_S3_SECRET_KEY = '+dy4Zqic9RRoU/y5VpOCZZcp6UgKRdl7u7KCl/J8x6U'
+
+
 
 log_cache = {}
 
+def getTaskData():
+    url = "https://discord-api.sofisun.software/api/getInpaintTask"
+    payload = 'key='+str(API_KEY)+'&status=in_progress'
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    result = response.json()
+    cid = result['id']
+    task_id = result['task_id']
+    inpaint_input_image_url = result['inpaint_input_image_url']
+    inpaint_mask_url = result['inpaint_mask_url']
+    inpaint_additional_prompt = result['inpaint_additional_prompt']
+
+    return [cid, task_id, inpaint_input_image_url, inpaint_mask_url, inpaint_additional_prompt]
+
+def updateInpaintDataResultImage(task_id, do_url_image):
+    url = "https://discord-api.sofisun.software/api/updateInpaintDataResultImage"
+    payload = 'key='+str(API_KEY)+'&task_id='+str(task_id)+'&url_image='+str(do_url_image)
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    result = response.json()
+    
+    return ''
 
 def get_current_html_path():
     date_string, local_temp_filename, only_name = generate_temp_filename(folder=modules.config.path_outputs,
@@ -46,6 +86,27 @@ def log(img, dic, single_line_number=3):
                 item += f"{k}: <b>{v}</b></p>\n"
     item += f"<p><img src=\"{only_name}\" width=auto height=100% loading=lazy style=\"height:auto;max-width:512px\" onerror=\"document.getElementById('{div_name}').style.display = 'none';\"></img></p><hr></div>\n"
     existing_log = item + existing_log
+
+    image_full_path_name = os.path.join(os.path.dirname(local_temp_filename), only_name)
+
+    task_data = getTaskData()
+    cid = task_data[0]
+    task_id = task_data[1]
+
+    # Initiate session DO S3
+    session = boto3.Session()
+    client = session.client('s3', region_name='nyc3', endpoint_url='https://generatedimages.sfo3.digitaloceanspaces.com', aws_access_key_id=DO_S3_ACCESS_ID, aws_secret_access_key=DO_S3_SECRET_KEY)
+
+    # Upload a file to your Space
+    for x in range(6):
+		if os.path.exists(image_full_path_name):
+			key = client.upload_file(image_full_path_name, 'images_inpaint', str(task_id)+'/'+str(only_name), ExtraArgs={'ACL': 'public-read'})
+			break
+		else:
+			time.sleep(2)
+    do_url_image = 'https://generatedimages.sfo3.digitaloceanspaces.com/images_inpaint/' + str(task_id)+'/'+str(only_name)
+
+    updateInpaintDataResultImage(task_id, do_url_image)
 
     with open(html_name, 'w', encoding='utf-8') as f:
         f.write(existing_log)

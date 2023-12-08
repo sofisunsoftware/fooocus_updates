@@ -1,7 +1,7 @@
 import requests
 
 url = "https://discord-api.sofisun.software/api/getInpaintTask"
-payload = 'key=lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq&status=in_progress'
+payload = 'key=&status=in_progress'
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }

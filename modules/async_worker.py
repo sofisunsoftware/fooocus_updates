@@ -160,6 +160,8 @@ def worker():
         inpaint_input_image = args.pop()
         inpaint_additional_prompt = args.pop()
 
+        image_number = 1
+
         print("prompt: ", prompt)
         print("negative_prompt: ", negative_prompt)
         print("inpaint_additional_prompt: ", inpaint_additional_prompt)

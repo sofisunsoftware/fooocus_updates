@@ -99,11 +99,11 @@ def log(img, dic, single_line_number=3):
 
     # Upload a file to your Space
     for x in range(6):
-		if os.path.exists(image_full_path_name):
-			key = client.upload_file(image_full_path_name, 'images_inpaint', str(task_id)+'/'+str(only_name), ExtraArgs={'ACL': 'public-read'})
-			break
-		else:
-			time.sleep(2)
+        if os.path.exists(image_full_path_name):
+            key = client.upload_file(image_full_path_name, 'images_inpaint', str(task_id)+'/'+str(only_name), ExtraArgs={'ACL': 'public-read'})
+            break
+        else:
+            time.sleep(2)
     do_url_image = 'https://generatedimages.sfo3.digitaloceanspaces.com/images_inpaint/' + str(task_id)+'/'+str(only_name)
 
     updateInpaintDataResultImage(task_id, do_url_image)

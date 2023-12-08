@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import cv2
 from skimage import io
 import requests
+from settings import *
 
 # API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
 
@@ -46,8 +47,6 @@ def worker():
     from modules.util import remove_empty_str, HWC3, resize_image, \
         get_image_shape_ceil, set_image_shape_ceil, get_shape_ceil, resample_image
     from modules.upscaler import perform_upscale
-
-    from settings import *
 
     try:
         async_gradio_app = shared.gradio_root

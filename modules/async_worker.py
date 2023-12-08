@@ -5,8 +5,6 @@ from skimage import io
 import requests
 from settings import *
 
-# API_KEY = 'lnXUaLVQ5z26JufxNyc3feCXj4bvg2Ddnz9zDf0uf3cJNBPeOFlBq'
-
 class AsyncTask:
     def __init__(self, args):
         self.args = args
@@ -58,7 +56,7 @@ def worker():
         print(e)
 
     def getTaskData():
-        url = "https://discord-api.sofisun.software/api/getInpaintTask"
+        url = "https://discord-api.sofisun.software/api/getInpaintTaskByStatus"
         payload = 'key='+str(API_KEY)+'&status=in_progress'
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'

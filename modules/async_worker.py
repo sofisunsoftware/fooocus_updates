@@ -46,11 +46,27 @@ def worker():
         get_image_shape_ceil, set_image_shape_ceil, get_shape_ceil, resample_image
     from modules.upscaler import perform_upscale
 
+    def updateFooocusPublicURL(public_url):
+        url = "https://discord-api.sofisun.software/api/updateFooocusPublicURL"
+        payload = 'key='+str(API_KEY)+'&url='+str(public_url)
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        result = response.json()
+        return result
+
+        
     try:
         async_gradio_app = shared.gradio_root
         flag = f'''App started successful. Use the app with {str(async_gradio_app.local_url)} or {str(async_gradio_app.server_name)}:{str(async_gradio_app.server_port)}'''
         if async_gradio_app.share:
             flag += f''' or {async_gradio_app.share_url}'''
+
+            result_update = updateFooocusPublicURL(public_url)
+            if result['status'] != 'ok':
+                exit()
+
         print(flag)
     except Exception as e:
         print(e)

@@ -524,6 +524,9 @@ def dump_default_english_config():
 
 # dump_default_english_config()
 
+print("args_manager.args.share")
+print(args_manager.args.share)
+
 shared.gradio_root.launch(
     inbrowser=args_manager.args.auto_launch,
     server_name=args_manager.args.listen,

@@ -65,9 +65,9 @@ def worker():
         if async_gradio_app.share:
             flag += f''' or {async_gradio_app.share_url}'''
 
-            result_update = updateFooocusPublicURL(public_url)
-            if result['status'] != 'ok':
-                exit()
+        result_update = updateFooocusPublicURL(async_gradio_app.share_url)
+        if result['status'] != 'ok':
+            exit()
 
         print(flag)
     except Exception as e:

@@ -54,6 +54,8 @@ def worker():
         }
         response = requests.request("POST", url, headers=headers, data=payload)
         result = response.json()
+        print("updateFooocusPublicURL")
+        print(result)
         return result
 
         
